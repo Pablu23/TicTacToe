@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using TicTacToe.Players;
 
 namespace TicTacToe
@@ -12,6 +11,7 @@ namespace TicTacToe
         {
             for (int i = 0; i < Fields.Length; i++)
             {
+                //Initialise all Fields and give them the Symbol on which Position they are
                 Fields[i] = new Field(Convert.ToChar((i+1).ToString()));
             }
         }
@@ -30,7 +30,8 @@ namespace TicTacToe
                 $"{Fields[7].Symbol} | " +
                 $"{Fields[8].Symbol}");
         }
-
+        
+        //Tries to mark a position, if the position is not free it returns a false
         public bool TryPlace(int pos, Player player, int round)
         {
             if (pos < 0 || pos > 9) return false;
@@ -78,7 +79,6 @@ namespace TicTacToe
         
         private bool IsBoardFull()
         {
-            //return !_fields.Any(x => x.State == FieldState.Empty);
             bool isBoardFull = true;
             foreach (var field in Fields)
             {
@@ -174,7 +174,6 @@ namespace TicTacToe
             return IsBoardFull();
         }
 
-
         public FieldState[] GetFieldStates()
         {
             var output = new FieldState[9];
@@ -186,23 +185,6 @@ namespace TicTacToe
             }
 
             return output;
-        }
-        /*public IList<Field> GetBoardCopy()
-        {
-            return Array.AsReadOnly(_fields);
-        }*/
-
-        public object GetBoardCopy()
-        {
-            return this.MemberwiseClone();
-        }
-        
-        public void SetBoard(IList<Field> fields)
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                Fields[i] = fields[i];
-            }
         }
     }
 }
