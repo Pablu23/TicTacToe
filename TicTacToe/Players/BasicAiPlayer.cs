@@ -12,9 +12,12 @@ namespace TicTacToe.Players
         
         public override int MakeMove(TicTacToeBoard _)
         {
+            // Just make a random move
+            // It doesnt need to get checked because the TicTacToe Class handles the input by itself
             return _random.Next(9);
         }
 
+        // No Cleanup is needed
         public override void CleanUp() { }
     }
 }

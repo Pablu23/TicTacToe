@@ -28,6 +28,7 @@ namespace TicTacToe
         }
     }
     
+    //Helper Class to call GetDescription on Variables of Type FieldState, to get the Names from those Types
     public static class FieldStateHelper
     {
         public static string GetDescription(this Enum value){

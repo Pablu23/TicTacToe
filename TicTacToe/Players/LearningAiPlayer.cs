@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
+// TODO: Comment this, ooh god ohh fuck ooh god pls no
 
 namespace TicTacToe.Players
 {
