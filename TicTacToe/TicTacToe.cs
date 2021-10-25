@@ -68,7 +68,7 @@ namespace TicTacToe
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    bool placed = true;
+                    bool placed;
                     do
                     {
                         placed = _board.TryPlace(Players[i].MakeMove(_board), Players[i], round);
