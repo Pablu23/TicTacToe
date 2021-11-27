@@ -12,8 +12,10 @@ namespace TicTacToe
         private bool _isServer = false;
         private int _port = 6969;
         private string _ipAddress = "127.0.0.1";
-        private Socket _client;
-
+        private NetworkStream _stream;
+        private TcpClient _client;
+        private TcpListener _listener;
+        
         private int _clientPlayerId = -1;
         
         public override void AddPlayer(Player player)
@@ -27,7 +29,26 @@ namespace TicTacToe
         {
             _isServer = x;
         }
+
+        public void SetIpAddress(string ip)
+        {
+            _ipAddress = ip;
+        }
         
+        protected override void CleanUp()
+        {
+            foreach (var player in Players)
+            {
+                player.CleanUp();
+            }
+            
+            _client.Close();
+            if (_isServer)
+            {
+                _listener.Stop();
+            }
+        }
+
         public override void StartGame()
         {
             if (_isServer)
@@ -86,45 +107,27 @@ namespace TicTacToe
 
         private void SendData(string data)
         {
-            data += "<EOF>";
-            Console.WriteLine("Sending Data: " + data);
-            byte[] bytes = Encoding.ASCII.GetBytes(data);
-            _client.Send(bytes);
+            Console.WriteLine("Sending data");
+            Console.WriteLine("Data: " + data);
+            byte[] bytes = Encoding.UTF8.GetBytes(data);
+            _stream.Write(bytes, 0, bytes.Length);
         }
         
         private string ReceiveData()
         {
-            string data = null;
-            byte[] bytes = null;
-
             Console.WriteLine("Receiving Data");
-            
-            while (true)
-            {
-                bytes = new byte[1024];
-                int bytesRec = _client.Receive(bytes);
-                data += Encoding.UTF8.GetString(bytes, 0, bytesRec);
-                Console.WriteLine("Data: " + data);
-                if (data.IndexOf("<EOF>") > -1)
-                {
-                    break;
-                }
-            }
-            
-            Console.WriteLine("Data Received, returning");
-            
+            byte[] bytes = new byte[_client.ReceiveBufferSize];
+            int bytesRead = _stream.Read(bytes, 0, _client.ReceiveBufferSize);
+
+            string data = Encoding.UTF8.GetString(bytes);
+            Console.WriteLine("Data: " + data);
             return data;
         }
         
         private void ConnectToServer()
         {
-            IPHostEntry host = Dns.GetHostEntry(_ipAddress);
-            IPAddress ipAddress = host.AddressList[0];
-            IPEndPoint remoteEndPoint = new IPEndPoint(ipAddress, _port);
-
-            _client = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-
-            _client.Connect(remoteEndPoint);
+            _client = new TcpClient(_ipAddress, _port);
+            _stream = _client.GetStream();
 
             Console.WriteLine("connected");
             
@@ -143,16 +146,13 @@ namespace TicTacToe
 
         private void StartServer()
         {
-            IPHostEntry host = Dns.GetHostEntry(_ipAddress);
-            IPAddress ipAddress = host.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, _port);
-            Socket server = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            server.Bind(localEndPoint);
-            server.Listen(1);
-
-            _client = server.Accept();
-
+            _listener = new TcpListener(IPAddress.Any, _port);
+            _listener.Start();
+            
+            _client = _listener.AcceptTcpClient();
             Console.WriteLine("A Client connected");
+            
+            _stream = _client.GetStream();
             
             var player = new HumanPlayer("Server", FieldState.PlayerX);
             AddPlayer(player);

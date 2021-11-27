@@ -22,6 +22,7 @@ namespace TicTacToe
                 Console.WriteLine("[C]onfig Players");
                 //Console.WriteLine("[N]ew Game");
                 Console.WriteLine("[S]tart Game");
+                Console.WriteLine("[O] Start Online Game");
                 Console.WriteLine("[E]nd");
 
                 char input = GetCharInput(new[] { 'c', 's', 'e', 'n', 'o' });
@@ -47,19 +48,7 @@ namespace TicTacToe
                         ticTacToe = new TicTacToe();
                         break;
                     case 'o':
-                        string hosting = Console.ReadLine();
-                        var test = new TicTacToeOnline();
-                        if (hosting == "t")
-                        {
-                            test.IsServer(true);
-                        }
-                        else
-                        {
-                            test.IsServer(false);
-                        }
-                        
-                        test.StartGame();
-                        
+                        StartOnlineGame();
                         break;
                 }
 
@@ -68,6 +57,30 @@ namespace TicTacToe
             }
         }
 
+        private static void StartOnlineGame()
+        {
+            Console.Clear();
+            var ticTacToeOnline = new TicTacToeOnline();
+            Console.WriteLine("Is this PC Hosting?");
+            Console.WriteLine("[Y]es");
+            Console.WriteLine("[N]o");
+            string hosting = Console.ReadLine();
+            
+            if (hosting.ToLower() == "y")
+            {
+                ticTacToeOnline.IsServer(true);
+            }
+            else
+            {
+                ticTacToeOnline.IsServer(false);
+                Console.WriteLine("On which IP Address should be connected?");
+                string ip = Console.ReadLine();
+                ticTacToeOnline.SetIpAddress(ip);
+            }
+            
+            ticTacToeOnline.StartGame();
+        } 
+        
         private static void ConfigPlayers(TicTacToe ticTacToe)
         {
 

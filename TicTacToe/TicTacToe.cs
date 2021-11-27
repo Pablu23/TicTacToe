@@ -63,7 +63,7 @@ namespace TicTacToe
         }
 
         //Do CleanUp for every Player (Mostly needed for LearningAi to update the brain)
-        private void CleanUp()
+        protected virtual void CleanUp()
         {
             foreach (var player in Players)
             {
