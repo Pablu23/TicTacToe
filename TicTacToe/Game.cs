@@ -4,7 +4,7 @@ using TicTacToe.Players;
 namespace TicTacToe
 {
     //Class on which every game bases on (Only TicTacToe atm)
-    abstract class Game
+    public abstract class Game
     {
         protected readonly List<Player> Players = new List<Player>();
         protected readonly Dictionary<Player, int> Scores = new Dictionary<Player, int>();

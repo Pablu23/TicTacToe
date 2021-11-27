@@ -4,11 +4,11 @@ using TicTacToe.Players;
 
 namespace TicTacToe
 {
-    class TicTacToe : Game
+    public class TicTacToe : Game
     {
-        private TicTacToeBoard _board;
+        protected TicTacToeBoard Board;
 
-        private bool _gameFinished;
+        protected bool GameFinished;
 
         private void RemovePlayer(Player player)
         {
@@ -74,9 +74,9 @@ namespace TicTacToe
         // Check if the game is finished, and if so add Scores and more for LearningAi
         public override void CheckGameState()
         {
-            if (!_board.IsGameFinished(out var winnerState)) return;
+            if (!Board.IsGameFinished(out var winnerState)) return;
             
-            _gameFinished = true;
+            GameFinished = true;
             
             // Get the winner (Player? <- ? because the player could be null)
             var winner = Players.FirstOrDefault(x => x.Symbol == winnerState);
@@ -88,7 +88,7 @@ namespace TicTacToe
                 var player = Players.FirstOrDefault(x => x.GetType() == typeof(LearningAiPlayer));
                 var learningAiPlayer = player as LearningAiPlayer;
                 if (learningAiPlayer != null) 
-                    learningAiPlayer.SaveToJson(_board);
+                    learningAiPlayer.SaveToJson(Board);
             }
             CleanUp();
         }
@@ -96,14 +96,14 @@ namespace TicTacToe
         public override void StartGame()
         {
             if (Players.Count != 2) throw new Exception("Not enough, or too many Players");
-            _board = new TicTacToeBoard();
+            Board = new TicTacToeBoard();
             
             // Draw the Board so the first Player can see it
-            _board.DrawBoard();
-            _gameFinished = false;
+            Board.DrawBoard();
+            GameFinished = false;
             int round = 0;
             
-            while (_gameFinished != true)
+            while (GameFinished != true)
             {
                 // For both Players
                 for (int i = 0; i < 2; i++)
@@ -113,14 +113,14 @@ namespace TicTacToe
                     bool placed;
                     do
                     {
-                        placed = _board.TryPlace(Players[i].MakeMove(_board), Players[i], round);
+                        placed = Board.TryPlace(Players[i].MakeMove(Board), Players[i], round);
                     } while (!placed);
                     
                     round++;
-                    _board.DrawBoard();
+                    Board.DrawBoard();
                     CheckGameState();
                     //Dont let the second Player make his turn if the game is already finished
-                    if (_gameFinished) break;
+                    if (GameFinished) break;
                 }
             }
         }

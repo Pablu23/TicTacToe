@@ -24,7 +24,7 @@ namespace TicTacToe
                 Console.WriteLine("[S]tart Game");
                 Console.WriteLine("[E]nd");
 
-                char input = GetCharInput(new[] { 'c', 's', 'e', 'n' });
+                char input = GetCharInput(new[] { 'c', 's', 'e', 'n', 'o' });
 
                 switch (input)
                 {
@@ -45,6 +45,21 @@ namespace TicTacToe
                         break;
                     case 'n':
                         ticTacToe = new TicTacToe();
+                        break;
+                    case 'o':
+                        string hosting = Console.ReadLine();
+                        var test = new TicTacToeOnline();
+                        if (hosting == "t")
+                        {
+                            test.IsServer(true);
+                        }
+                        else
+                        {
+                            test.IsServer(false);
+                        }
+                        
+                        test.StartGame();
+                        
                         break;
                 }
 
