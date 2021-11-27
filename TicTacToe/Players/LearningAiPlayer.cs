@@ -44,7 +44,7 @@ namespace TicTacToe.Players
     //TODO: Save Board history somehow
     public class LearningAiPlayer : Player
     {
-        private string _pathToLearningDir = @"E:\Programieren\csharp\TicTacToe\TicTacToe\Players\LearningAiDir\ai.json";
+        private string _pathToLearningDir = @"C:\Users\zam.k\source\repos\TicTacToe\TicTacToe\Players\LearningAiDir\ai.json";
         private int _round;
         private AiBrain _brain;
         private Random _random;
@@ -104,14 +104,14 @@ namespace TicTacToe.Players
                 return move;
             }
             
-            if (_brain is not null)
+            if (_brain != null)
             {
                 var allPlayedRounds = _brain.AllOutcomes.FindAll(x =>
                     Equals(x.GetBoardAtTime(_round), copyOfBoard));
                 if (_round == 0)
                 {
                     var bestOption = _brain.AllOutcomes.Aggregate((i, j) => i.Weight > j.Weight ? i : j);
-                    if (bestOption is not null)
+                    if (bestOption != null)
                     {
                         move = bestOption.GetNextMove(_round);
                     }
@@ -119,7 +119,7 @@ namespace TicTacToe.Players
                 if (allPlayedRounds.Count != 0)
                 {
                     var bestOption = allPlayedRounds.Aggregate((i, j) => i.Weight > j.Weight ? i : j);
-                    if (bestOption is not null)
+                    if (bestOption != null)
                     {
                         move = bestOption.GetNextMove(_round);
                     }

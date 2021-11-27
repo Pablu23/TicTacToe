@@ -86,7 +86,7 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="TicTacToe.Program" Collapsed="true">
-    <Position X="19.75" Y="7.5" Width="1.5" />
+    <Position X="19.25" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
       <FileName>Program.cs</FileName>
@@ -105,12 +105,9 @@
   <Class Name="TicTacToe.TicTacToeBoard">
     <Position X="10.25" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAEAAAABIAAAAAECAEEIAAAAAAAAQAQAAAAARAAA=</HashCode>
+      <HashCode>AAAAAEAAAABAAAAAAEAAAEIAAAAAAAAQAQAAAAARgAA=</HashCode>
       <FileName>TicTacToeBoard.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Field Name="_fields" />
-    </ShowAsAssociation>
   </Class>
   <Enum Name="TicTacToe.FieldState">
     <Position X="15" Y="4.75" Width="1.5" />

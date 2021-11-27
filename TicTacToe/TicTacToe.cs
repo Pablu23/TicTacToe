@@ -9,12 +9,43 @@ namespace TicTacToe
         private TicTacToeBoard _board;
 
         private bool _gameFinished;
-        
+
+        private void RemovePlayer(Player player)
+        {
+            if (Players.Count <= 0) throw new Exception("No Players found cant remove Player");
+            Players.Remove(player);
+            Scores.Remove(player);
+        }
+
+        public void ReplacePlayer(int oldPlayerIndex, Player newPlayer)
+        {
+            RemovePlayer(Players[oldPlayerIndex]);
+            AddPlayer(newPlayer);
+        }
+
         public override void AddPlayer(Player player)
         {
             if (Players.Count >= 2) throw new Exception("Trying to add too many Players");
             Players.Add(player);
             Scores.Add(player, 0);
+        }
+
+        public int GetPlayerCount()
+        {
+            return Players.Count();
+        }
+
+        public FieldState GetOpponentSymbol(int playerIndex)
+        {
+            return Players[playerIndex].Symbol;
+        }
+
+        public void ShowPlayers()
+        {
+            for (int i = 0; i < Players.Count; i++)
+            {
+                Console.WriteLine($"[{i+1}] Name: {Players[i].Name} | Symbol: {Players[i].Symbol} | Type: {Players[i].GetType().ToString().Substring(18)}");
+            }   
         }
 
         public override void AddScore(Player player)
@@ -49,14 +80,14 @@ namespace TicTacToe
             
             // Get the winner (Player? <- ? because the player could be null)
             var winner = Players.FirstOrDefault(x => x.Symbol == winnerState);
-            if (winner is not null)
+            if (winner != null)
             {
                 AddScore(winner);
                 
                 //If one of the Players was a LearningAiPlayer add the Match to the Ai Brain
                 var player = Players.FirstOrDefault(x => x.GetType() == typeof(LearningAiPlayer));
                 var learningAiPlayer = player as LearningAiPlayer;
-                if (learningAiPlayer is not null) 
+                if (learningAiPlayer != null) 
                     learningAiPlayer.SaveToJson(_board);
             }
             CleanUp();
@@ -72,7 +103,7 @@ namespace TicTacToe
             _gameFinished = false;
             int round = 0;
             
-            while (_gameFinished is not true)
+            while (_gameFinished != true)
             {
                 // For both Players
                 for (int i = 0; i < 2; i++)

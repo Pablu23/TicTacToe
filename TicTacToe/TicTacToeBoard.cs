@@ -12,25 +12,35 @@ namespace TicTacToe
             for (int i = 0; i < Fields.Length; i++)
             {
                 //Initialise all Fields and give them the Symbol on which Position they are
-                Fields[i] = new Field(Convert.ToChar((i+1).ToString()));
+                Fields[i] = new Field(Convert.ToChar((i + 1).ToString()));
             }
         }
 
         public void DrawBoard()
         {
             Console.Clear();
-            Console.WriteLine(
-                $"{Fields[0].Symbol} | " +
-                $"{Fields[1].Symbol} | " +
-                $"{Fields[2].Symbol}\n--------\n" +
-                $"{Fields[3].Symbol} | " +
-                $"{Fields[4].Symbol} | " +
-                $"{Fields[5].Symbol}\n--------\n" +
-                $"{Fields[6].Symbol} | " +
-                $"{Fields[7].Symbol} | " +
-                $"{Fields[8].Symbol}");
+
+            for (int i = 0; i < 9; i++)
+            {
+                if (Fields[i].State == FieldState.PlayerO)
+                    Console.ForegroundColor = ConsoleColor.Green;
+                if (Fields[i].State == FieldState.PlayerX)
+                    Console.ForegroundColor = ConsoleColor.Red;
+                if (Fields[i].State == FieldState.Empty)
+                    Console.ForegroundColor = ConsoleColor.Gray;
+
+                Console.Write(Fields[i].Symbol);
+                Console.ForegroundColor = ConsoleColor.Gray;
+
+                if ((i + 1) % 3 == 0 && i != 8)
+                    Console.Write("\n--------\n");
+                else if (i == 8)
+                    Console.WriteLine();
+                else
+                    Console.Write(" | ");
+            }
         }
-        
+
         //Tries to mark a position, if the position is not free it returns a false
         public bool TryPlace(int pos, Player player, int round)
         {
@@ -63,7 +73,7 @@ namespace TicTacToe
             {
                 history[i] = -1;
             }
-            
+
             int index = 0;
             foreach (var field in Fields)
             {
@@ -76,7 +86,7 @@ namespace TicTacToe
 
             return history;
         }
-        
+
         private bool IsBoardFull()
         {
             bool isBoardFull = true;
@@ -141,14 +151,14 @@ namespace TicTacToe
                     }
                 }
             }
-            
+
             return false;
         }
 
         private bool Diagonal(out FieldState winner)
         {
             winner = Fields[4].State;
-            return Fields[4].State != FieldState.Empty && 
+            return Fields[4].State != FieldState.Empty &&
                    (Fields[0].State == Fields[4].State && Fields[4].State == Fields[8].State ||
                     Fields[2].State == Fields[4].State && Fields[4].State == Fields[6].State);
         }
